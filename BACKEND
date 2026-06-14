@@ -1,0 +1,303 @@
+{
+  "name": "BACKEND",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        0,
+        0
+      ],
+      "id": "7b892035-2227-446b-81ec-8d55d16dd627",
+      "name": "When chat message received",
+      "webhookId": "d1b8fca5-e39e-4ce7-bdf5-c30ec4d91531"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "You are an AI Knowledge Assistant. Always search the knowledge base first, use conversation memory for context, and answer only from retrieved document information. Include source citations for every factual response. Use available tools when needed, and if information is not found, reply: \"I could not find this information in the uploaded documents.\""
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "fa1f25b9-6b0b-4178-9be8-3507ea363b98",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": "llama-3.1-8b-instant",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        80,
+        208
+      ],
+      "id": "b8247160-3aaa-4ae6-bda5-eef3c08e89e6",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "FxiSke0ot2cBeWOT",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "contextWindowLength": 30
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        304,
+        176
+      ],
+      "id": "8b6e4b1b-f942-485f-9d42-95d7441008ae",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolDescription": "Call this tool to get the restaurant data which was stored from a csv with columns Restaurant ID,Restaurant Name,Country Code,City,Address,Locality,Locality Verbose,Longitude,Latitude,Cuisines,Average Cost for two,Currency,Has Table booking,Has Online delivery,Is delivering now,Switch to order menu,Price range,Aggregate rating,Rating color,Rating text,Votes",
+        "pineconeIndex": {
+          "__rl": true,
+          "value": "kush",
+          "mode": "list",
+          "cachedResultName": "kush"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStorePinecone",
+      "typeVersion": 1.3,
+      "position": [
+        464,
+        160
+      ],
+      "id": "6e3d403a-f0c0-4a75-bee2-0886f71e0c82",
+      "name": "Pinecone Vector Store",
+      "credentials": {
+        "pineconeApi": {
+          "id": "ppRiqBXwCfcrjDKp",
+          "name": "Pinecone account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "embed-english-v3.0"
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsCohere",
+      "typeVersion": 1,
+      "position": [
+        496,
+        320
+      ],
+      "id": "afaf6252-092c-4464-9092-51b94ea6137b",
+      "name": "Embeddings Cohere",
+      "credentials": {
+        "cohereApi": {
+          "id": "fl8yxOpj1OY5ue5l",
+          "name": "Cohere account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "formTitle": "Data",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Data",
+              "fieldType": "file"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.6,
+      "position": [
+        912,
+        -528
+      ],
+      "id": "6439045f-28e5-40d2-a093-c4f34bdd7908",
+      "name": "On form submission",
+      "webhookId": "d299b567-9afa-4e26-a29e-80cdd8dc95f4"
+    },
+    {
+      "parameters": {
+        "dataType": "binary",
+        "loader": "csvLoader",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1.1,
+      "position": [
+        1248,
+        -256
+      ],
+      "id": "93d12c50-6016-4446-a02d-35d3e10dd504",
+      "name": "Default Data Loader"
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "pineconeIndex": {
+          "__rl": true,
+          "value": "kush",
+          "mode": "list",
+          "cachedResultName": "kush"
+        },
+        "options": {
+          "pineconeNamespace": ""
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStorePinecone",
+      "typeVersion": 1.3,
+      "position": [
+        1120,
+        -528
+      ],
+      "id": "7fcfd1b5-3fde-4ff2-8cad-a73fca94b71d",
+      "name": "Pinecone Vector Store1",
+      "credentials": {
+        "pineconeApi": {
+          "id": "ppRiqBXwCfcrjDKp",
+          "name": "Pinecone account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "embed-english-v3.0"
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsCohere",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        -256
+      ],
+      "id": "c26d926b-b45a-4ec0-9b10-a531464156f4",
+      "name": "Embeddings Cohere1",
+      "credentials": {
+        "cohereApi": {
+          "id": "fl8yxOpj1OY5ue5l",
+          "name": "Cohere account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pinecone Vector Store": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings Cohere": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Pinecone Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Pinecone Vector Store1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Default Data Loader": {
+      "ai_document": [
+        [
+          {
+            "node": "Pinecone Vector Store1",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings Cohere1": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Pinecone Vector Store1",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "49dba01f-2e75-4a55-87cd-2a655491f3c6",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "3f886bf2b338170e66b5310ba35f8191b0ad0d7c8d2f73767e94619d26bd6bd9"
+  },
+  "nodeGroups": [],
+  "id": "8oVT6ae1aOvAwJao",
+  "tags": []
+}
